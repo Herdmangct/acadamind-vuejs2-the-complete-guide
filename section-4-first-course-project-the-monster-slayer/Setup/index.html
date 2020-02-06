@@ -15,6 +15,7 @@
             <div
               class="healthbar text-center"
               style="background-color: green; margin: 0; color: white;"
+              :style="{ width: `${yourHealth}%` }"
             >
               {{ yourHealth }}
             </div>
@@ -26,6 +27,7 @@
             <div
               class="healthbar text-center"
               style="background-color: green; margin: 0; color: white;"
+              :style="{ width: `${monsterHealth}%` }"
             >
               {{ monsterHealth }}
             </div>
@@ -39,7 +41,7 @@
       </section>
       <section v-if="gameStarted" class="row controls">
         <div class="small-12 columns">
-          <button id="attack">ATTACK</button>
+          <button id="attack" @click="attack">ATTACK</button>
           <button id="special-attack">SPECIAL ATTACK</button>
           <button id="heal">HEAL</button>
           <button id="give-up" @click="startGame">GIVE UP</button>
@@ -47,8 +49,8 @@
       </section>
       <section class="row log">
         <div class="small-12 columns">
-          <ul>
-            <li></li>
+          <ul v-for="item in gameDialog">
+            <li>{{ item }}</li>
           </ul>
         </div>
       </section>
