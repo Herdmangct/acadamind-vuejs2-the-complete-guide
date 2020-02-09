@@ -8,23 +8,30 @@ new Vue({
     damage: 0
   },
   methods: {
-    startGame() {
+    changeGameStatus() {
       this.gameStarted = !this.gameStarted;
       this.gameDialog = [];
       this.yourHealth = 100;
       this.monsterHealth = 100;
+    },
+    gameOver() {
+      if (this.yourHealth <= 0 || this.monsterHealth <= 0) {
+        this.changeGameStatus();
+      }
     },
     attack() {
       this.damage = this.generateRandomNum();
       this.monsterHealth -= this.damage;
       this.gameDialog.push(this.generateGameDialog(false, "player", "monster"));
       this.monsterAttack();
+      this.gameOver();
     },
     specialAttack() {
       this.damage = this.generateRandomNum() * 3;
       this.monsterHealth -= this.damage;
       this.gameDialog.push(this.generateGameDialog(true, "player", "monster"));
       this.monsterAttack();
+      this.gameOver();
     },
     monsterAttack() {
       if (this.generateRandomNum === 7) {
@@ -42,6 +49,7 @@ new Vue({
           this.generateGameDialog(false, "monster", "player")
         );
       }
+      this.gameOver();
     },
     generateGameDialog(isSpecial, player1, player2) {
       const result = isSpecial

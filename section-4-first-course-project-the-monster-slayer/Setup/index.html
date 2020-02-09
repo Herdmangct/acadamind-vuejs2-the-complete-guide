@@ -36,7 +36,9 @@
       </section>
       <section v-if="!gameStarted" class="row controls">
         <div class="small-12 columns">
-          <button id="start-game" @click="startGame">START NEW GAME</button>
+          <button id="start-game" @click="changeGameStatus">
+            START NEW GAME
+          </button>
         </div>
       </section>
       <section v-if="gameStarted" class="row controls">
@@ -46,7 +48,7 @@
             SPECIAL ATTACK
           </button>
           <button id="heal">HEAL</button>
-          <button id="give-up" @click="startGame">GIVE UP</button>
+          <button id="give-up" @click="changeGameStatus">GIVE UP</button>
         </div>
       </section>
       <section class="row log">
