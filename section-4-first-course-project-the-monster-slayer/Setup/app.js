@@ -15,24 +15,42 @@ new Vue({
       this.monsterHealth = 100;
     },
     attack() {
-      this.monsterHealth -= 10;
+      this.damage = this.generateRandomNum();
+      this.monsterHealth -= this.damage;
+      this.gameDialog.push(this.generateGameDialog(false, "player", "monster"));
+      this.monsterAttack();
+    },
+    specialAttack() {
+      this.damage = this.generateRandomNum() * 3;
+      this.monsterHealth -= this.damage;
+      this.gameDialog.push(this.generateGameDialog(true, "player", "monster"));
       this.monsterAttack();
     },
     monsterAttack() {
-      const randomNum = Math.floor(Math.random() * 10);
-      if (randomNum === 7) {
+      if (this.generateRandomNum === 7) {
         // special attack
-        this.damage = 30;
+        this.damage = this.generateRandomNum() * 3;
         this.yourHealth -= this.damage;
         this.gameDialog.push(
-          `Special Attack! Monster Hits Player For ${this.damage}`
+          this.generateGameDialog(true, "monster", "player")
         );
       } else {
         // normal attack
-        this.damage = 10;
+        this.damage = this.generateRandomNum();
         this.yourHealth -= this.damage;
-        this.gameDialog.push(`Monster Hits Player For ${this.damage}`);
+        this.gameDialog.push(
+          this.generateGameDialog(false, "monster", "player")
+        );
       }
+    },
+    generateGameDialog(isSpecial, player1, player2) {
+      const result = isSpecial
+        ? `Special Attack! ${player1} Hits ${player2} For ${this.damage}`
+        : `${player1} Hits ${player2} For ${this.damage}`;
+      return result.toUpperCase();
+    },
+    generateRandomNum() {
+      return Math.floor(Math.random() * 10);
     }
   }
 });
