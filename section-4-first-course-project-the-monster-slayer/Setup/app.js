@@ -16,6 +16,7 @@ new Vue({
     },
     gameOver() {
       if (this.yourHealth <= 0 || this.monsterHealth <= 0) {
+        alert(this.yourHealth <= 0 ? "Monster Wins!" : "You Win!");
         this.changeGameStatus();
       }
     },
@@ -50,6 +51,15 @@ new Vue({
         );
       }
       this.gameOver();
+    },
+    heal() {
+      if (this.yourHealth < 100) {
+        this.yourHealth += this.damage;
+        this.yourHealth = this.yourHealth > 100 ? 100 : this.yourHealth;
+        if (this.generateRandomNum === 7 && this.monsterHealth < 100) {
+          this.monsterHealth += this.damage;
+        }
+      }
     },
     generateGameDialog(isSpecial, player1, player2) {
       const result = isSpecial
