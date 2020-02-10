@@ -7,16 +7,25 @@ new Vue({
     gameDialog: []
   },
   methods: {
-    changeGameStatus() {
-      this.gameStarted = !this.gameStarted;
+    changeGameStatus(gameStarted = !this.gameStarted) {
+      this.gameStarted = gameStarted;
       this.gameDialog = [];
       this.yourHealth = 100;
       this.monsterHealth = 100;
     },
-    gameOver() {
-      if (this.yourHealth <= 0 || this.monsterHealth <= 0) {
-        alert(this.yourHealth <= 0 ? "Monster Wins!" : "You Win!");
-        this.changeGameStatus();
+    isGameOver() {
+      if (this.monsterHealth <= 0) {
+        if (confirm("You Win! New Game?")) {
+          this.changeGameStatus(true);
+        } else {
+          this.gameStarted = false;
+        }
+      } else if (this.yourHealth <= 0) {
+        if (confirm("Monster Wins! New Game?")) {
+          this.changeGameStatus(true);
+        } else {
+          this.gameStarted = false;
+        }
       }
     },
     attack() {
@@ -25,8 +34,10 @@ new Vue({
       this.gameDialog.push(
         this.generateGameDialog(false, "player", "monster", damage)
       );
+
+      if (this.isGameOver()) return;
+
       this.monsterAttack();
-      this.gameOver();
     },
     specialAttack() {
       const damage = this.generateRandomNum();
@@ -34,8 +45,10 @@ new Vue({
       this.gameDialog.push(
         this.generateGameDialog(true, "player", "monster", damage)
       );
+
+      if (this.isGameOver()) return;
+
       this.monsterAttack();
-      this.gameOver();
     },
     monsterAttack() {
       if (this.generateRandomNum() === 7) {
@@ -53,7 +66,7 @@ new Vue({
           this.generateGameDialog(false, "monster", "player", damage)
         );
       }
-      this.gameOver();
+      this.isGameOver();
     },
     heal() {
       if (this.yourHealth < 100) {
