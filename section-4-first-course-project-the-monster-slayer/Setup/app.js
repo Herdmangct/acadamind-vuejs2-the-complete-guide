@@ -68,7 +68,7 @@ new Vue({
       return result.toUpperCase();
     },
     generateRandomNum() {
-      return Math.floor(Math.random() * 10);
+      return Math.floor(Math.random() * 10) + 1;
     }
   }
 });
