@@ -51,7 +51,7 @@
           <button id="give-up" @click="changeGameStatus">GIVE UP</button>
         </div>
       </section>
-      <section class="row log">
+      <section class="row log" v-if="gameDialog.length > 0">
         <div class="small-12 columns">
           <ul v-for="item in gameDialog">
             <li>{{ item }}</li>
