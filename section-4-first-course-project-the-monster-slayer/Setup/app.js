@@ -32,7 +32,7 @@ new Vue({
       const damage = this.generateRandomNum();
       this.monsterHealth -= damage;
       this.gameDialog.unshift(
-        this.generateGameDialog(false, "player", "monster", damage)
+        this.generateGameDialog("", "player", "monster", damage)
       );
       if (this.isGameOver()) return;
 
@@ -42,7 +42,7 @@ new Vue({
       const damage = this.generateRandomNum();
       this.monsterHealth -= damage;
       this.gameDialog.unshift(
-        this.generateGameDialog(true, "player", "monster", damage)
+        this.generateGameDialog("special", "player", "monster", damage)
       );
 
       if (this.isGameOver()) return;
@@ -55,14 +55,14 @@ new Vue({
         const damage = this.generateRandomNum(3);
         this.yourHealth -= damage;
         this.gameDialog.unshift(
-          this.generateGameDialog(true, "monster", "player", damage)
+          this.generateGameDialog("special", "monster", "player", damage)
         );
       } else {
         // normal attack
         const damage = this.generateRandomNum();
         this.yourHealth -= damage;
         this.gameDialog.unshift(
-          this.generateGameDialog(false, "monster", "player", damage)
+          this.generateGameDialog("", "monster", "player", damage)
         );
       }
       this.isGameOver();
@@ -71,23 +71,41 @@ new Vue({
       const heal = this.generateRandomNum();
       if (this.yourHealth + heal < 100) {
         this.yourHealth += heal;
+        this.gameDialog.unshift(
+          this.generateGameDialog("heal", "player", "monster", heal)
+        );
         // random monster healing
-        if (this.generateRandomNum() === 7 && this.monsterHealth + heal < 100) {
+        if (heal === 7 && this.monsterHealth + heal < 100) {
           this.monsterHealth += heal;
+          this.gameDialog.unshift(
+            this.generateGameDialog("heal", "monster", "player", heal)
+          );
         }
       }
     },
-    generateGameDialog(type, player1, player2, damage) {
-      const result = isSpecial
-        ? `Special Attack! ${player1} Hits ${player2} For ${damage}`
-        : `${player1} Hits ${player2} For ${damage}`;
-      switch (type.toLowerCase) {
+    generateGameDialog(
+      type = "",
+      player1 = "player",
+      player2 = "monster",
+      damage
+    ) {
+      switch (type.toLowerCase()) {
         case "special":
-          return `Special Attack! ${player1} Hits ${player2} For ${damage}`;
+          return {
+            isPlayer: player1 === "player",
+            dialog: `Special Attack! ${player1} Hits ${player2} For ${damage}`
+          };
         case "heal":
-          return `${player1} Heals For `;
+          return {
+            isPlayer: player1 === "player",
+            dialog: `${player1} Heals For ${damage}`
+          };
+        default:
+          return {
+            isPlayer: player1 === "player",
+            dialog: `${player1} Hits ${player2} For ${damage}`
+          };
       }
-      return result.toUpperCase();
     },
     generateRandomNum(specialDamage = 1) {
       return (Math.floor(Math.random() * 10) + 1) * specialDamage;
